@@ -10,14 +10,15 @@
  * Negativo - Branco com Laranja
 */
 
-// ATUALIZAR AS DUAS VÁRIAVEIS ABAIXO.
-int totalFans = 2;
-int fansPins[] = {7, 8};
-// ATUALIZAR AS DUAS VARIÁVEIS ACIMA.
+// ATUALIZAR AS VÁRIAVEIS ABAIXO.
+int totalFans = 6;
+int fansPins[] = {22, 24, 26, 28, 30, 32};
+int sensoresPins[] = {0, 1, 2, 3, 4, 5};
+int sensor;
+// ATUALIZAR AS VARIÁVEIS ACIMA.
 
-int pinSensor = 0;
 int count = 0, limiteLoop = 5;
-int delayPadrao = 700;
+int delayPadrao = 100;
 int sensorMinimo = 400, sensorMedio = 800;
 
 void setup() {
@@ -29,24 +30,33 @@ void setup() {
 }
 
 void loop() {
-  int sensor = analogRead(pinSensor);
-  if(sensor < sensorMinimo){
-    desligaTodos();
-    delay(delayPadrao);
-  } else if (sensor < sensorMedio){
-    halfWay();
-  } else {
-    ligaTodos();
-    delay(delayPadrao);
+  for(int i = 0; i < totalFans; i++){
+    sensor = analogRead(sensoresPins[i]);
+    if(sensor < sensorMinimo){
+      desliga(fansPins[i]);
+      delay(delayPadrao);
+    } else if (sensor < sensorMedio){
+      halfWay(fansPins[i]);
+    } else {
+      liga(fansPins[i]);
+      delay(delayPadrao);
+    }
   }
-  Serial.println(sensor);
 }
 
-void halfWay(){
-  ligaTodos();
+void halfWay(int pin){
+  liga(pin);
   delay(delayPadrao);
-  desligaTodos();
-  delay(delayPadrao);  
+  desliga(pin);
+  delay(delayPadrao);
+}
+
+void liga(int pin){
+  digitalWrite(pin, HIGH);
+}
+
+void desliga(int pin){
+  digitalWrite(pin, LOW); 
 }
 
 void desligaTodos(){
